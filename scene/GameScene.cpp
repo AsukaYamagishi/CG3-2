@@ -61,11 +61,17 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	modelSkydome = Model::CreateFromOBJ("skydome");
 	modelGround = Model::CreateFromOBJ("ground");
 	modelFighter = Model::CreateFromOBJ("chr_sword");
+	modelSphere = Model::CreateFromOBJ("sphere");
 
 	// 3Dオブジェクト生成
 	objSkydome = Object3d::Create(modelSkydome);
 	objGround = Object3d::Create(modelGround);
 	objFighter = Object3d::Create(modelFighter);
+	objSphere = Object3d::Create(modelSphere);
+
+	//初期座標のセット
+	objFighter->SetPosition({ +1,0,0 });
+	objSphere->SetPosition({ -1,1,0 });
 
 	// カメラ注視点をセット
 	camera->SetTarget({0, 1, 0});
@@ -83,6 +89,7 @@ void GameScene::Update()
 	objSkydome->Update();
 	objGround->Update();
 	objFighter->Update();
+	objSphere->Update();
 }
 
 void GameScene::Draw()
@@ -109,9 +116,10 @@ void GameScene::Draw()
 #pragma region 3D描画
 	// 3Dオブジェクトの描画
 	Object3d::PreDraw(cmdList);
-	objSkydome->Draw();
-	objGround->Draw();
+	//objSkydome->Draw();
+	//objGround->Draw();
 	objFighter->Draw();
+	objSphere->Draw();
 	Object3d::PostDraw();
 
 	// パーティクルの描画

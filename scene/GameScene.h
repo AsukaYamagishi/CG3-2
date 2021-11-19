@@ -76,9 +76,11 @@ private: // メンバ変数
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
 	Model* modelFighter = nullptr;
+	Model* modelSphere = nullptr;
 
 	Object3d* objSkydome = nullptr;
 	Object3d* objGround = nullptr;
 	Object3d* objFighter = nullptr;
+	Object3d* objSphere = nullptr;
 };
 
