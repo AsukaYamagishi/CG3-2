@@ -10,6 +10,7 @@
 #include "DebugText.h"
 #include "Audio.h"
 #include "DebugCamera.h"
+#include "Light.h"
 
 /// <summary>
 /// ゲームシーン
@@ -64,7 +65,8 @@ private: // メンバ変数
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
 	Audio* audio = nullptr;
-	DebugText debugText;	
+	DebugText debugText;
+	Light* light = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用

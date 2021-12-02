@@ -1,5 +1,7 @@
 ﻿#include "GameScene.h"
 #include <cassert>
+#include <sstream>
+#include <iomanip>
 
 using namespace DirectX;
 
@@ -17,6 +19,7 @@ GameScene::~GameScene()
 	safe_delete(modelSkydome);
 	safe_delete(modelGround);
 	safe_delete(modelFighter);
+	safe_delete(light);
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
@@ -35,6 +38,13 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
+
+	//ライト生成
+	light = Light::Create();
+	//ライト色を設定
+	light->SetLightColor({ 1,1,1 });
+	//3Dオブジェクトにライトをセット
+	Object3d::SetLight(light);
 
 	// デバッグテキスト用テクスチャ読み込み
 	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
@@ -84,7 +94,47 @@ void GameScene::Update()
 	// パーティクル生成
 	//CreateParticles();
 
+	//オブジェクトの回転
+	{
+		XMFLOAT3 rot = objSphere->GetRotation();
+		rot.y += 1.0f;
+		objSphere->SetRotation(rot);
+		objFighter->SetRotation(rot);
+	}
+
+	//ライト方向を変化させるサンプル
+	{
+		//光線方向初期値              上 奥
+		static XMVECTOR lightDir = { 0,1,5,0 };
+
+		if (input->PushKey(DIK_W)) { lightDir.m128_f32[1] += 1.0f; }
+		else if (input->PushKey(DIK_S)) { lightDir.m128_f32[1] -= 1.0f; }
+		if (input->PushKey(DIK_D)) { lightDir.m128_f32[0] += 1.0f; }
+		else if (input->PushKey(DIK_A)) { lightDir.m128_f32[0] -= 1.0f; }
+
+		light->SetLightDir(lightDir);
+
+		std::ostringstream debugstr;
+		debugstr << "lightDirFactor("
+			<< std::fixed << std::setprecision(2)
+			<< lightDir.m128_f32[0] << ","
+			<< lightDir.m128_f32[1] << ","
+			<< lightDir.m128_f32[2] << ")";
+		debugText.Print(debugstr.str(), 50, 50, 1.0f);
+		debugstr.str("");
+		debugstr.clear();
+
+		const XMFLOAT3& cameraPos = camera->GetEye();
+		debugstr << "cameraPos("
+			<< std::fixed << std::setprecision(2)
+			<< cameraPos.x << ","
+			<< cameraPos.y << ","
+			<< cameraPos.z << ")";
+		debugText.Print(debugstr.str(), 50, 70, 1.0f);
+	}
+
 	camera->Update();
+	light->Update();
 	particleMan->Update();
 
 	objSkydome->Update();
