@@ -167,8 +167,8 @@ void GameScene::Draw()
 #pragma region 3D描画
 	// 3Dオブジェクトの描画
 	Object3d::PreDraw(cmdList);
-	//objSkydome->Draw();
-	//objGround->Draw();
+	objSkydome->Draw();
+	objGround->Draw();
 	objFighter->Draw();
 	objSphere->Draw();
 	Object3d::PostDraw();
