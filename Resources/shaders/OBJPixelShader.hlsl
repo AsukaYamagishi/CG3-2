@@ -7,6 +7,6 @@ float4 main(VSOutput input) : SV_TARGET
 {
 	//テクスチャマッピング
 	float4 texcolor = tex.Sample(smp, input.uv);
-	//テクスチャの色は使わず色を数値指定
-	return float4(0,1,1,1);
+	//シェーディングによる色で描画
+	return input.color*texcolor;
 }

@@ -7,6 +7,7 @@
 #include <d3dx12.h>
 #include "Material.h"
 #include <vector>
+#include <unordered_map>
 
 /// <summary>
 /// 形状データ
@@ -21,6 +22,7 @@ private: // エイリアス
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
+	using XMVECTOR = DirectX::XMVECTOR;
 
 public: // サブクラス
 	// 頂点データ構造体（テクスチャあり）
@@ -70,6 +72,13 @@ public: // メンバ関数
 	void AddIndex(unsigned short index);
 
 	/// <summary>
+	/// エッジ平滑化データの追加
+	/// </summary>
+	/// <param name="indexPosition">座標インデックス</param>
+	/// <param name="indexVertex">頂点インデックス</param>
+	void AddSmoothData(unsigned short indexPosition, unsigned short indexVertex);
+
+	/// <summary>
 	/// 頂点データの数を取得
 	/// </summary>
 	/// <returns>頂点データの数</returns>
@@ -86,6 +95,11 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="material">マテリアル</param>
 	void SetMaterial(Material* material);
+
+	/// <summary>
+	/// 平滑化された頂点法線の計算
+	/// </summary>
+	void CalculateSmoothedVertexNormals();
 
 	/// <summary>
 	/// バッファの生成
@@ -127,5 +141,7 @@ private: // メンバ変数
 	std::vector<unsigned short> indices;
 	// マテリアル
 	Material* material = nullptr;
+	//頂点法線スムージング用データ
+	std::unordered_map<unsigned short, std::vector<unsigned short>> smoothData;
 };
 
